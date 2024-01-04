@@ -1,0 +1,69 @@
+@startuml
+!include ./puml.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+class Configuration <<Immutable>> {
+    + width: Integer
+    + height: Integer
+    + seed: Long
+    + output: FileStream
+    + humanReadable: Boolean
+    --
+    + {static} load(args: String[]): Configuration
+}
+
+class Location <<Immutable>> {
+    + this(x: Integer, y: Integer)
+    --
+    + x(): Integer
+    + y(): Integer
+    --
+    + neighbors(): Set<Location>
+}
+
+
+class Maze {
+    + this(width: Integer, height: Integer)
+    --
+    + getWidth(): Integer
+    + getHeight(): Integer
+    --
+    + tileAt(y: int, x: int): Tile
+    + neighborsInRange(loc: Location): Set<Location>
+    --
+    + carve(random: Random)
+    + punch(loc: Location)
+    + destroyWall(from: Location, to: Location)
+}
+
+enum Tile {
+    + EMPTY
+    + WALL
+}
+
+'Tile  "tiles *" <--* Maze
+
+Maze *-> "tiles *" Tile
+
+class MazeExporter {
+    + this(theMaze: Maze)
+    --
+    + export(out: FileStream, humanReadable?: boolean)
+}
+
+class MazeCarver {
+    + carve(theMaze: Maze, rand: Random)
+}
+
+
+Main ..> Configuration
+MazeExporter <.. Main
+Main .> Maze
+Maze ..> MazeCarver
+Maze .> Location
+MazeCarver .> Location
+
+@enduml
