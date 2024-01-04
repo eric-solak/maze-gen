@@ -61,8 +61,9 @@ class MazeCarver {
 
 Main ..> Configuration
 MazeExporter <.. Main
+MazeExporter ..> Maze
 Main .> Maze
-Maze ..> MazeCarver
+Maze <..> MazeCarver
 Maze .> Location
 MazeCarver .> Location
 
