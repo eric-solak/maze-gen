@@ -1,0 +1,40 @@
+@startuml
+!include ./puml.style
+
+class Main {
+    + {static} main(args: String[])
+}
+
+class Configuration <<Immutable>> {
+    + width: Integer
+    + height: Integer
+    + seed: Long
+    + output: FileStream
+    + humanReadable: Boolean
+    --
+    + {static} load(args: String[]): Configuration
+}
+
+class Maze {
+    + this(width: Integer, height: Integer)
+    --
+    + carve(random: Random)
+}
+
+class MazeExporter {
+    + this(theMaze: Maze)
+    --
+    + export(out: FileStream, humanReadable?: boolean)
+}
+
+
+
+
+Configuration <. Main
+'Main ..> Configuration
+MazeExporter <.. Main
+MazeExporter ..> Maze
+Main .> Maze
+
+
+@enduml

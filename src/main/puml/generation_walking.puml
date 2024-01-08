@@ -1,0 +1,33 @@
+@startuml
+!include ./puml.style
+
+autoactivate on
+
+participant "_: Main" as Main
+participant "config: Configuration" as Config
+participant "random: Random" as Random
+participant "maze: Maze" as Maze
+participant "exporter: MazeExporter" as Exporter
+
+[-> Main: main(args)
+
+    create Config
+        Main -> Config: __load(args)__
+        return c
+    create Random
+        Main -> Random: this(c.seed())
+        return random
+    create Maze
+        Main -> Maze: this(c.width, c.height)
+        return
+    Main -> Maze: carve(random)
+        return
+
+    create Exporter
+        Main -> Exporter: this(maze)
+        return
+    Main -> Exporter: export(out, humanReadable)
+    return
+
+return
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+!include ./puml.style
+
+
+
+class Location <<Immutable>> {
+    + this(x: Integer, y: Integer)
+    --
+    + x(): Integer
+    + y(): Integer
+    --
+    + neighbors(): Set<Location>
+}
+
+
+class Maze {
+    + this(width: Integer, height: Integer)
+    --
+    + getWidth(): Integer
+    + getHeight(): Integer
+    --
+    + tileAt(y: int, x: int): Tile
+    + neighborsInRange(loc: Location): Set<Location>
+    --
+    + carve(random: Random)
+    + punch(loc: Location)
+    + destroyWall(from: Location, to: Location)
+}
+
+enum Tile {
+    + EMPTY
+    + WALL
+}
+
+Tile  "tiles *" <--* Maze
+
+'Maze *-> "tiles *" Tile
+
+
+interface MazeCarver {
+    + carve(theMaze: Maze, rand: Random)
+}
+
+class Prim implements MazeCarver {
+    + carve(theMaze: Maze, rand: Random)
+}
+
+
+
+
+Maze <..> MazeCarver
+Maze .> Location
+Location <.. Prim
+
+@enduml
